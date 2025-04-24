@@ -1,9 +1,7 @@
 package input;
 
 import entity.base.Entity;
-import entity.creatures.npc.Vendor;
-import entity.player.Player;
-import enums.GameState;
+
 import game.ui.GamePanel;
 
 import java.awt.event.KeyEvent;
@@ -17,36 +15,18 @@ public class KeyInput implements KeyListener {
         this.gp = gp;
     }
 
+
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        // Cambiar de estado con números
-        switch (key) {
-            case KeyEvent.VK_1 -> gp.setCurrentState(GameState.GAMEPLAY);
-            case KeyEvent.VK_2 -> gp.setCurrentState(GameState.SHOP);
-            case KeyEvent.VK_3 -> gp.setCurrentState(GameState.BATTLE);
+        // Llamar a handleInput de cada entidad
+        for (Entity entity : gp.getEntityManager().getEntities()) {
+            entity.handleInput(key);
         }
 
-        GameState state = gp.getCurrentState();
-
-        switch (state) {
-            case GAMEPLAY -> {
-                for (Entity entity : gp.getEntityManager().getAll()) {
-                    entity.handleInput(key);
-                }
-            }
-            case SHOP -> {
-                for (Vendor v : gp.getEntityManager().getEntitiesOfType(Vendor.class)) {
-                    v.handleInput(key);
-                }
-            }
-            case BATTLE -> {
-                for (Player p : gp.getEntityManager().getEntitiesOfType(Player.class)) {
-                    p.handleBattleInput(key);
-                }
-            }
-        }
+        // Repintar el panel después de que las entidades se hayan actualizado
+        gp.repaint();
     }
 
     @Override public void keyTyped(KeyEvent e) {}

@@ -1,33 +1,31 @@
 package manager;
 
 import entity.base.Entity;
+/**
+ * EntityManager maneja todas las entidades del juego.
+ * Permite agregarlas, eliminarlas o acceder por tipo.
+ */
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gestiona todas las entidades del juego.
+ */
 public class EntityManager {
-    private final List<Entity> entities = new ArrayList<>();
 
-    public void addEntity(Entity e) {
-        entities.add(e);
+    private List<Entity> entities;
+
+    public EntityManager() {
+        entities = new ArrayList<>();
     }
 
-    public void removeEntity(Entity e) {
-        entities.remove(e);
+    public void addEntity(Entity entity) {
+        entities.add(entity);
     }
 
-    public List<Entity> getAll() {
+    public List<Entity> getEntities() {
         return entities;
-    }
-
-    public <T extends Entity> List<T> getEntitiesOfType(Class<T> type) {
-        List<T> result = new ArrayList<>();
-        for (Entity e : entities) {
-            if (type.isInstance(e)) {
-                result.add(type.cast(e));
-            }
-        }
-        return result;
     }
 }
 

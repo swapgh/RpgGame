@@ -10,16 +10,23 @@ public class Game implements Runnable {
 
     public Game() {
         System.out.println("  └── Game: Constructor");
-        GamePanel panel = new GamePanel(); // instanciamos panel para usarlo
+
+        // Creamos el GamePanel
+        GamePanel panel = new GamePanel();
+
+        // Creamos las entidades
         Player player = new Player(panel);
         Vendor vendor = new Vendor(panel);
 
+        // Añadir las entidades al EntityManager del GamePanel
+        panel.getEntityManager().addEntity(player);
+        panel.getEntityManager().addEntity(vendor);
 
-
+        // Crear el frame
         GameFrame frame = new GameFrame(panel);
-        frame.addKeyListener(new KeyInput(panel)); // controlar con teclado
-        frame.setFocusable(true); // necesario para recibir input
-        frame.requestFocusInWindow(); // asegurar foco             // creamos el jugador usando el panel
+        frame.addKeyListener(new KeyInput(panel)); // Controlar con teclado
+        frame.setFocusable(true); // Necesario para recibir input
+        frame.requestFocusInWindow(); // Aseguramos que el frame tenga el foco
     }
 
     @Override

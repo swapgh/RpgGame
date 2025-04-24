@@ -1,60 +1,48 @@
 package game.ui;
-
-import entity.creatures.npc.Vendor;
-import entity.player.Player;
-import enums.GameState;
+import java.util.List;
+import java.util.ArrayList;
+import entity.base.Entity;
 import manager.EntityManager;
-
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * GamePanel es el panel principal donde se dibuja el juego.
+ * Gestiona entidades, el estado actual y cambia el fondo según la pantalla.
+ */
 public class GamePanel extends JPanel {
-private final EntityManager entityManager = new EntityManager();
-public GameState currentState = GameState.GAMEPLAY;
+    public EntityManager entityManager;
+    private List<Entity> entities;  // Lista de entidades
 
-private Player player;
-private Vendor vendor;
 
 public GamePanel() {
     System.out.println("    └── GamePanel: Constructor");
-    this.setBackground(Color.GREEN); // color por defecto
+    this.entityManager = new EntityManager();
+    color();
+    this.setFocusable(true); // Asegúrate de que el panel sea enfocable
+    this.requestFocusInWindow(); // Asegúrate de que el panel tenga el foco
+//    this.entities = new ArrayList<>();
 }
-
-public void setPlayer(Player player) {
-    this.player = player;
-    entityManager.addEntity(player);
-}
-
-public void setVendor(Vendor vendor) {
-    this.vendor = vendor;
-    entityManager.addEntity(vendor);
-}
-
-public Player getPlayer() {
-    return player;
-}
-
-public Vendor getVendor() {
-    return vendor;
-}
-
-public GameState getCurrentState() {
-    return currentState;
-}
-
-public void setCurrentState(GameState state) {
-    this.currentState = state;
-
-    switch (state) {
-        case GAMEPLAY -> setBackground(Color.GREEN);
-        case SHOP -> setBackground(Color.YELLOW);
-        case BATTLE -> setBackground(Color.RED);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        // Dibujar cada entidad en la lista
+        for (Entity entity : entityManager.getEntities()) {
+            entity.paintComponent(g);  // Llamar al metodo de cada entidad para que se dibuje
+        }
     }
 
-    repaint(); // importante para actualizar el color
-}
+    public void addEntity(Entity entity) {
+        entities.add(entity);  // Agregar entidades al panel
+    }
 
-public EntityManager getEntityManager() {
-    return entityManager;
-}
+    public void color() {
+        this.setBackground(Color.GREEN);  // Cambiar color de fondo del panel
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
+    }
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }
